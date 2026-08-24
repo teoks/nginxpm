@@ -1,0 +1,18 @@
+.:53 {
+    # 1. Match local -> return NXDOMAIN
+    template IN ANY local {
+        rcode NXDOMAIN
+    }
+
+    # 2. Match *.example.com -> forward to public DNS (1.1.1.1)
+    forward example.com 1.1.1.1 {
+        # Except website[0-9]+.example.com which falls through to default upstream
+        except website1.example.com website2.example.com website3.example.com
+    }
+
+    # 3. Default upstream for all other queries -> Docker internal DNS resolver
+    forward . 127.0.0.11
+
+    log
+    errors
+}

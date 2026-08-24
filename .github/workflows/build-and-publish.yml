@@ -1,0 +1,161 @@
+name: Build and Publish
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly rebuild — picks up Debian trixie security patches automatically
+    - cron: '0 3 * * 1'
+
+jobs:
+  # ─── Job 1: Build the frontend ────────────────────────────────────────────────
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: yarn install --frozen-lockfile
+
+      - name: Compile locales
+        working-directory: frontend
+        run: yarn locale-compile
+
+      - name: Run tests
+        working-directory: frontend
+        run: yarn vitest run --no-color
+
+      - name: Build
+        working-directory: frontend
+        run: yarn build
+
+      - name: Upload frontend dist
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 1
+
+  # ─── Job 2: Lint the backend ──────────────────────────────────────────────────
+  lint-backend:
+    name: Lint Backend
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: backend/yarn.lock
+
+      - name: Install dependencies
+        working-directory: backend
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        working-directory: backend
+        run: yarn lint
+
+  # ─── Job 3: Build and push Docker image ───────────────────────────────────────
+  build-and-push:
+    name: Build and Push Image
+    needs: [build-frontend, lint-backend]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Download frontend dist
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Set up QEMU (multi-arch)
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.3.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.11.0
+
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.4.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.7.0
+        with:
+          images: |
+            teoks/nginxpm
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and push
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.16.0
+        with:
+          context: .
+          file: docker/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BUILD_VERSION=${{ github.ref_name }}
+            BUILD_COMMIT=${{ github.sha }}
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─── Job 4: Verify the published image ───────────────────────────────────────
+  verify:
+    name: Verify Image
+    needs: build-and-push
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Pull and verify versions
+        run: |
+          IMAGE="teoks/nginxpm:${{ github.ref_name }}"
+          docker pull "$IMAGE"
+          echo "=== NGINX version ==="
+          docker run --rm "$IMAGE" nginx -v
+          echo "=== OpenSSL version ==="
+          docker run --rm "$IMAGE" openssl version
+          echo "=== Node.js version ==="
+          docker run --rm "$IMAGE" node --version
+          echo "=== Certbot version ==="
+          docker run --rm "$IMAGE" certbot --version

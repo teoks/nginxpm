@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "dev": "vitepress dev --host",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "set-version": "./scripts/set-version.sh"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  },
+  "dependencies": {},
+  "resolutions": {
+    "vite": "^6.4.3",
+    "esbuild": "^0.25.0"
+  }
+}

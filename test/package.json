@@ -6,7 +6,7 @@
 	"dependencies": {
 		"@cypress/grep": "^6.0.0",
 		"@jc21/cypress-swagger-validation": "^0.3.2",
-		"@quobix/vacuum": "^0.26.4",
+		"@quobix/vacuum": "^0.30.0",
 		"axios": "^1.18.0",
 		"chalk": "^6.0.0",
 		"cypress": "^15.15.0",

@@ -1,15 +1,3 @@
-<p align="center">
-	<img src="https://nginxproxymanager.com/github.png">
-	<br><br>
-	<img src="https://img.shields.io/badge/version-1.0.0-green.svg?style=for-the-badge">
-	<a href="https://hub.docker.com/repository/docker/teoks/nginxpm">
-		<img src="https://img.shields.io/docker/stars/teoks/nginxpm.svg?style=for-the-badge">
-	</a>
-	<a href="https://hub.docker.com/repository/docker/teoks/nginxpm">
-		<img src="https://img.shields.io/docker/pulls/teoks/nginxpm.svg?style=for-the-badge">
-	</a>
-</p>
-
 # nginxpm
 
 This project comes as a pre-built Docker image that enables you to easily forward to your websites

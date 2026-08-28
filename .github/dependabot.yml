@@ -1,104 +1,85 @@
 version: 2
+
+# Reusable configuration template for npm directories
+x-npm-config: &npm-template
+  package-ecosystem: "npm"
+  schedule:
+    interval: "weekly"
+  open-pull-requests-limit: 10
+  commit-message:
+    prefix: "npm"
+  labels:
+    - "dependencies"
+    - "javascript"
+  groups:
+    dev-patch-updates:
+      dependency-type: "development"
+      update-types:
+        - "patch"
+    dev-minor-updates:
+      dependency-type: "development"
+      update-types:
+        - "minor"
+    prod-patch-updates:
+      dependency-type: "production"
+      update-types:
+        - "patch"
+    prod-minor-updates:
+      dependency-type: "production"
+      update-types:
+        - "minor"
+
 updates:
-  - package-ecosystem: "npm"
+  # --- Node.js / NPM Ecosystems ---
+  - <<: *npm-template
     directory: "/backend"
-    schedule:
-      interval: "weekly"
-    groups:
-      dev-patch-updates:
-        dependency-type: "development"
-        update-types:
-          - "patch"
-      dev-minor-updates:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-      prod-patch-updates:
-        dependency-type: "production"
-        update-types:
-          - "patch"
-      prod-minor-updates:
-        dependency-type: "production"
-        update-types:
-          - "minor"
+    commit-message:
+      prefix: "npm(backend)"
 
-  - package-ecosystem: "npm"
+  - <<: *npm-template
     directory: "/frontend"
-    schedule:
-      interval: "weekly"
-    groups:
-      dev-patch-updates:
-        dependency-type: "development"
-        update-types:
-          - "patch"
-      dev-minor-updates:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-      prod-patch-updates:
-        dependency-type: "production"
-        update-types:
-          - "patch"
-      prod-minor-updates:
-        dependency-type: "production"
-        update-types:
-          - "minor"
+    commit-message:
+      prefix: "npm(frontend)"
 
-  - package-ecosystem: "npm"
+  - <<: *npm-template
     directory: "/docs"
-    schedule:
-      interval: "weekly"
-    groups:
-      dev-patch-updates:
-        dependency-type: "development"
-        update-types:
-          - "patch"
-      dev-minor-updates:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-      prod-patch-updates:
-        dependency-type: "production"
-        update-types:
-          - "patch"
-      prod-minor-updates:
-        dependency-type: "production"
-        update-types:
-          - "minor"
+    commit-message:
+      prefix: "npm(docs)"
 
-  - package-ecosystem: "npm"
+  - <<: *npm-template
     directory: "/test"
-    schedule:
-      interval: "weekly"
-    groups:
-      dev-patch-updates:
-        dependency-type: "development"
-        update-types:
-          - "patch"
-      dev-minor-updates:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-      prod-patch-updates:
-        dependency-type: "production"
-        update-types:
-          - "patch"
-      prod-minor-updates:
-        dependency-type: "production"
-        update-types:
-          - "minor"
+    commit-message:
+      prefix: "npm(test)"
 
+  # --- Docker Ecosystem ---
   - package-ecosystem: "docker"
     directory: "/docker"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "docker"
+    labels:
+      - "dependencies"
+      - "docker"
     groups:
       updates:
         update-types:
           - "patch"
           - "minor"
 
+  # --- GitHub Actions ---
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "github-actions"
+    groups:
+      actions-updates:
+        patterns:
+          - "*"

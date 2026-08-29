@@ -1,31 +1,31 @@
 version: 2
 
 updates:
-  # --- Node.js / NPM Ecosystems ---
   - package-ecosystem: "npm"
     directory: "/backend"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
     commit-message:
       prefix: "npm(backend)"
     labels:
       - "dependencies"
       - "javascript"
+      - "backend"
     groups:
-      dev-patch-updates:
+      backend-dev-patch:
         dependency-type: "development"
         update-types:
           - "patch"
-      dev-minor-updates:
+      backend-dev-minor:
         dependency-type: "development"
         update-types:
           - "minor"
-      prod-patch-updates:
+      backend-prod-patch:
         dependency-type: "production"
         update-types:
           - "patch"
-      prod-minor-updates:
+      backend-prod-minor:
         dependency-type: "production"
         update-types:
           - "minor"
@@ -34,115 +34,62 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 5
     commit-message:
       prefix: "npm(frontend)"
     labels:
       - "dependencies"
       - "javascript"
+      - "frontend"
     groups:
-      dev-patch-updates:
+      frontend-dev-patch:
         dependency-type: "development"
         update-types:
           - "patch"
-      dev-minor-updates:
+      frontend-dev-minor:
         dependency-type: "development"
         update-types:
           - "minor"
-      prod-patch-updates:
+      frontend-prod-patch:
         dependency-type: "production"
         update-types:
           - "patch"
-      prod-minor-updates:
+      frontend-prod-minor:
         dependency-type: "production"
         update-types:
           - "minor"
 
-  - package-ecosystem: "npm"
-    directory: "/docs"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "npm(docs)"
-    labels:
-      - "dependencies"
-      - "javascript"
-    groups:
-      dev-patch-updates:
-        dependency-type: "development"
-        update-types:
-          - "patch"
-      dev-minor-updates:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-      prod-patch-updates:
-        dependency-type: "production"
-        update-types:
-          - "patch"
-      prod-minor-updates:
-        dependency-type: "production"
-        update-types:
-          - "minor"
-
-  - package-ecosystem: "npm"
-    directory: "/test"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    commit-message:
-      prefix: "npm(test)"
-    labels:
-      - "dependencies"
-      - "javascript"
-    groups:
-      dev-patch-updates:
-        dependency-type: "development"
-        update-types:
-          - "patch"
-      dev-minor-updates:
-        dependency-type: "development"
-        update-types:
-          - "minor"
-      prod-patch-updates:
-        dependency-type: "production"
-        update-types:
-          - "patch"
-      prod-minor-updates:
-        dependency-type: "production"
-        update-types:
-          - "minor"
-
-  # --- Docker Ecosystem ---
   - package-ecosystem: "docker"
     directory: "/docker"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     commit-message:
       prefix: "docker"
     labels:
       - "dependencies"
       - "docker"
     groups:
-      updates:
+      docker-minor-patch:
         update-types:
           - "patch"
           - "minor"
 
-  # --- GitHub Actions ---
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 3
     commit-message:
       prefix: "ci"
     labels:
       - "dependencies"
       - "github-actions"
     groups:
-      actions-updates:
+      docker-workflow-actions:
         patterns:
-          - "*"
+          - "docker/*"
+          - "actions/checkout"
+          - "actions/setup-node"
+          - "actions/upload-artifact"
+          - "actions/download-artifact"

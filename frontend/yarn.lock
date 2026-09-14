@@ -603,10 +603,10 @@
   dependencies:
     tslib "^2.8.0"
 
-"@tabler/core@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@tabler/core/-/core-1.5.0.tgz#f026defd62e4444073a33cd8da91a781046eb554"
-  integrity sha512-nXFwOF0jlH6cH57eCRDI6uxhlQGtN92hBmkSwgIsUNg+hQBwnK9clAv3dEcSkVkXY+lKpDq8hpCvDT1AwPIzZw==
+"@tabler/core@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@tabler/core/-/core-1.5.1.tgz#d083f17521acb7df4bc231bc79e653bfeae268c9"
+  integrity sha512-PI9rJq4H4lBh53YP/J+m5Uz6lqVQbsGPmWCMN34IP4KQQ/wy28YMO6a3Eiz1cQHdFFr+3MlU3yYhXdzvFGJfqw==
   dependencies:
     "@popperjs/core" "^2.11.8"
 
@@ -2249,10 +2249,10 @@ property-information@^7.0.0:
   resolved "https://registry.npmjs.org/property-information/-/property-information-7.2.0.tgz"
   integrity sha512-IAtzIB6sUiWaJYrX9smp3V46pBGbBeLFRGdh25kg1334VcBlD8HzhPeNIWQH9zhGmo2itIe25EHt9dQP7G5hmg==
 
-query-string@^9.5.0:
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/query-string/-/query-string-9.5.0.tgz"
-  integrity sha512-YlJmwNyi0RGYjlxYcuDncMsxFU7YyutbuI7gTm8ySxIGBlwx5yiBCOD5ig9ZNoHkawk/1Dey0N5mEfcUybMVAA==
+query-string@^9.5.1:
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.5.1.tgz#aecdc091d3dc7ce293eed83957e220d523a3d0f7"
+  integrity sha512-/zO3RwuRCMTIcEgq6YMv4OrtEE1XzBG7w5N6zc6ydYnkWYOWsnLI/5894hYEzfESfMOT4cHCsRTIdxsSl1KjGg==
   dependencies:
     decode-uri-component "^0.5.0"
     filter-obj "^5.1.0"
@@ -2359,17 +2359,17 @@ react-markdown@^10.1.0:
     unist-util-visit "^5.0.0"
     vfile "^6.0.0"
 
-react-router-dom@^7.18.2:
-  version "7.18.2"
-  resolved "https://registry.npmjs.org/react-router-dom/-/react-router-dom-7.18.2.tgz"
-  integrity sha512-AIKJ/jgGlFb3EbfCXk5Gzshiwt+l3mqbCrNjmEWMMjqQxNJ3svBa6bgzFyCC2Sw3RA0VWF1kg3uQf2OFhxb8hw==
+react-router-dom@^7.18.3:
+  version "7.18.3"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-7.18.3.tgz#0688c91b4b376c8b0dcaf0a0064975d52a32e0f7"
+  integrity sha512-ytVbyBBM7vMfRCam25r0WMhSVSom909A8p+8m0/f1w853dz/xfFu6etAT2SEbVoSnI+ZoPRDqIsQXVT89gp7kg==
   dependencies:
-    react-router "7.18.2"
+    react-router "7.18.3"
 
-react-router@7.18.2:
-  version "7.18.2"
-  resolved "https://registry.npmjs.org/react-router/-/react-router-7.18.2.tgz"
-  integrity sha512-aUVMjFm3GAPTTZL7oYr5E7ETiqfQCHRLH+B+5afnICvf0r7kkK4eR6SMuwbSTJw/7t+12khT/Kahij49fqOCIg==
+react-router@7.18.3:
+  version "7.18.3"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.18.3.tgz#2a3257aa7c5edd5a71f878063e4c7f3fcfc4b76a"
+  integrity sha512-gyXgtdr5uACJ5b1Q4udzjVV+tb/rlHIMJKuJ0e89R4Kzgz47z/rgP0dIKxktqIEUhDHluGTPJJH/wRha7CyqsA==
   dependencies:
     cookie "^1.0.1"
     set-cookie-parser "^2.6.0"
